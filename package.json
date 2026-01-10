@@ -1,0 +1,9 @@
+{
+  "name": "carbon-free-technologies",
+  "version": "1.0.0",
+  "description": "Carbon Free Technologies - CleanTech Website",
+  "scripts": {
+    "start": "npx serve .",
+    "build": "echo 'Static site - no build needed'"
+  }
+}
