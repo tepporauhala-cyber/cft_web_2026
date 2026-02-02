@@ -5,5 +5,8 @@
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp index.html dist/index.html && cp -r images dist/images && cp *.png dist/ 2>/dev/null || true",
     "start": "npx serve dist"
+  },
+  "devDependencies": {
+    "serve": "^14.2.5"
   }
 }
