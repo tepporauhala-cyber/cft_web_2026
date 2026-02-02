@@ -324,26 +324,29 @@
                   </p>
                 </div>
 
-                <div className="mt-12">
-                  <h3 className="text-2xl text-cft-primary mb-6 font-bold">Core Expertise</h3>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {expertise.map((e, i) => (
-                      <div key={i} className="flex items-center gap-3 p-4 bg-white border border-gray-100 shadow-sm hover:shadow-md rounded-xl transition-all hover:-translate-y-0.5 group">
-                        <div className="w-8 h-8 rounded-full bg-cft-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-cft-primary/20 transition-colors">
-                          <svg className="w-5 h-5 text-cft-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
-                          </svg>
-                        </div>
-                        <span className="font-semibold text-cft-ink text-sm leading-tight">{e}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
               </FadeInSection>
             </div>
 
-            {/* Key Points */}
+            {/* Core Expertise */}
             <FadeInSection className="mt-20">
+              <h3 className="text-2xl text-cft-primary mb-6 font-bold">Core Expertise</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                {expertise.map((e, i) => (
+                  <div key={i} className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center h-full hover:shadow-md transition-shadow group">
+                    <div className="w-12 h-12 rounded-full bg-cft-primary/10 flex items-center justify-center mb-4 group-hover:bg-cft-primary/20 transition-colors">
+                      <svg className="w-6 h-6 text-cft-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span className="font-bold text-cft-ink text-sm leading-tight">{e}</span>
+                  </div>
+                ))}
+              </div>
+            </FadeInSection>
+
+            {/* Key Points */}
+            <FadeInSection className="mt-12">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 {[
                   { title: 'Innovations', desc: 'More than 10 years of R&D' },
