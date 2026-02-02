@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp index.html dist/index.html && cp -r images dist/images && cp *.png dist/ 2>/dev/null || true",
-    "start": "npx serve dist"
+    "build": "rm -rf public && mkdir -p public && cp index.html public/index.html && cp -r images public/images && cp *.png public/ 2>/dev/null || true",
+    "start": "npx serve public"
   },
   "devDependencies": {
-    "serve": "^14.2.5"
+    "serve": "^14.2.4"
   }
 }
