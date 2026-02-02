@@ -275,11 +275,13 @@
                   className="rounded-2xl shadow-lg img-sharp mb-8 w-full object-cover h-auto"
                 />
                 <h3 className="text-2xl text-cft-primary mb-4">Core Expertise</h3>
-                <div className="grid sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-2">
                   {expertise.map((e, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cft-primary flex-shrink-0"></div>
-                      <span className="font-medium text-cft-ink text-sm">{e}</span>
+                    <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors">
+                      <div className="w-8 h-8 rounded-full bg-cft-primary/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-2.5 h-2.5 rounded-full bg-cft-primary"></div>
+                      </div>
+                      <span className="font-semibold text-cft-ink text-base">{e}</span>
                     </div>
                   ))}
                 </div>
@@ -492,8 +494,8 @@
 
     const Team = () => (
       <section id="team" className="section-alt relative">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80" className="w-full h-full object-cover grayscale" />
+        <div className="absolute inset-0 opacity-[0.25] pointer-events-none">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80" className="w-full h-full object-cover" />
         </div>
         <div className="container mx-auto px-6 relative">
           <FadeInSection className="text-center mb-16">
