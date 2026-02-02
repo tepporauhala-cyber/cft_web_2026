@@ -10,42 +10,105 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            'betolar': {
-              'primary': '#005a40',
-              'dark': '#003924',
-              'mid': '#007051'
-            },
-            'ink': '#0f172a',
-            'muted': '#475569',
-            'surface': '#f7f8f9'
+            'cft': {
+              'primary': '#2E7D32',  /* Priority 4: Accent Color */
+              'dark': '#1B5E20',     /* Hover state */
+              'ink': '#0f172a',
+              'muted': '#475569',
+              'surface': '#f8f9fa'   /* Alternating bg color */
+            }
           },
           fontFamily: {
-            'sans': ['Inter', 'Arial', 'sans-serif']
+            'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'] /* Priority 2 */
+          },
+          maxWidth: {
+            'read': '680px' /* Priority 2: Readable text width */
           }
         }
       }
     }
   </script>
   <style>
+    /* Priority 2: Typography & Base */
     body {
-      font-family: 'Inter', Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      font-size: 18px;
     }
 
-    .nav-glass {
-      background: rgba(255, 255, 255, 0.9);
+    h1,
+    h2,
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    section {
+      padding: 100px 0;
+      /* Priority 2: Breathing room */
+    }
+
+    /* Priority 3: Alternating Backgrounds */
+    .section-alt:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    .section-alt:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    /* Priority 1: Hero Specifics */
+    .hero-overlay {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    /* Priority 3: Sticky Nav */
+    .nav-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    /* Priority 4: Visual Anchoring */
+    .img-sharp {
+      image-rendering: -webkit-optimize-contrast;
+      filter: contrast(1.05) saturate(1.1);
+    }
+
+    /* Priority 5: Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
 
-<body class="bg-surface text-ink">
+<body class="text-cft-ink antialiased">
   <div id="root"></div>
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -53,473 +116,331 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
 
-    // ========== NAVBAR ==========
-    const Navbar = () => {
-      const [isScrolled, setIsScrolled] = useState(false);
-      const [menuOpen, setMenuOpen] = useState(false);
-
+    // Hook for visibility animation
+    const useFadeIn = () => {
+      const domRef = useRef();
       useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 50);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        const { current } = domRef;
+        if (current) observer.observe(current);
+        return () => current && observer.unobserve(current);
       }, []);
+      return domRef;
+    };
+
+    const FadeInSection = ({ children, className = "" }) => {
+      const fadeRef = useFadeIn();
+      return (
+        <div ref={fadeRef} className={`fade-in ${className}`}>
+          {children}
+        </div>
+      );
+    };
+
+    const Navbar = () => {
+      const [menuOpen, setMenuOpen] = useState(false);
 
       const scrollTo = (id) => {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
         setMenuOpen(false);
       };
 
-      const links = [
-        { label: 'About us', id: 'about' },
-        { label: 'Market demand', id: 'market' },
-        { label: 'Solution & impact', id: 'solution' },
-        { label: 'Team and advisors', id: 'team' },
-        { label: 'Contact us', id: 'contact' },
-      ];
+      const links = ['about', 'market', 'solution', 'team'];
 
       return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 nav-glass transition-all ${isScrolled ? 'py-3' : 'py-4'}`}>
+        <nav className="nav-sticky py-4">
           <div className="container mx-auto px-6 flex justify-between items-center">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollTo('hero')}>
-              <div className="w-9 h-9 rounded-lg bg-betolar-primary flex items-center justify-center">
-                <span className="text-white font-semibold text-lg">C</span>
+              <div className="w-10 h-10 rounded bg-cft-primary flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-xl">C</span>
               </div>
-              <span className="text-ink font-semibold text-sm hidden sm:block tracking-wide">CARBON FREE TECHNOLOGIES</span>
+              <span className="text-cft-ink font-bold text-base tracking-wide uppercase">Carbon Free Technologies</span>
             </div>
 
-            <div className="hidden md:flex items-center gap-6">
-              {links.map(l => (
-                <button key={l.id} onClick={() => scrollTo(l.id)} className="text-muted hover:text-betolar-primary text-sm font-medium transition-colors">
-                  {l.label}
+            <div className="hidden md:flex items-center gap-8">
+              {links.map(id => (
+                <button key={id} onClick={() => scrollTo(id)} className="text-cft-ink hover:text-cft-primary font-semibold capitalize transition-colors">
+                  {id}
                 </button>
               ))}
-              <button onClick={() => scrollTo('contact')} className="px-5 py-2 bg-betolar-primary text-white rounded-lg font-medium text-sm hover:bg-betolar-dark transition-colors">
+              <button onClick={() => scrollTo('contact')} className="px-6 py-3 bg-cft-primary text-white rounded font-semibold hover:bg-cft-dark transition-colors shadow-md hover:shadow-lg">
                 Contact Us
               </button>
             </div>
 
-            <button className="md:hidden text-ink" onClick={() => setMenuOpen(!menuOpen)}>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+              <svg className="w-8 h-8 text-cft-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
               </svg>
             </button>
           </div>
 
           {menuOpen && (
-            <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3">
-              {links.map(l => (
-                <button key={l.id} onClick={() => scrollTo(l.id)} className="block w-full text-left text-ink py-2 hover:text-betolar-primary">
-                  {l.label}
+            <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 absolute w-full shadow-xl">
+              {links.map(id => (
+                <button key={id} onClick={() => scrollTo(id)} className="block w-full text-left py-3 font-medium capitalize text-cft-ink">
+                  {id}
                 </button>
               ))}
+              <button onClick={() => scrollTo('contact')} className="block w-full text-left py-3 font-bold text-cft-primary">
+                Contact Us
+              </button>
             </div>
           )}
         </nav>
       );
     };
 
-    // ========== SLIDE 1: HERO ==========
     const Hero = () => (
-      <section id="hero" className="relative min-h-screen flex items-center">
+      <section id="hero" className="section-alt relative h-screen flex items-center p-0!">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?w=1920&q=80" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-betolar-dark/65"></div>
+          <img src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?w=1920&q=80" alt="Landscape" className="w-full h-full object-cover img-sharp" />
+          <div className="absolute inset-0 hero-overlay"></div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-6 pt-20">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
-              Circular economy based concrete production – TODAY
+        <div className="relative z-10 container mx-auto px-6">
+          <FadeInSection className="max-w-4xl">
+            <h1 className="hero-title text-white mb-8">
+              Circular Economy Concrete – <br />40% Less CO₂, Today
             </h1>
-
-            <p className="text-lg text-white/90 mb-6 leading-relaxed max-w-xl">
-              Over the past 10 years, we have led, advised, and helped hundreds of companies to develop and grow their business and succeed in the global market and at the same time become more sustainable. It is our passion to help companies grow and succeed sustainably.
+            <p className="text-xl text-white/95 mb-10 leading-relaxed max-w-2xl font-medium drop-shadow-md">
+              Over the past 10 years, we have led, advised, and helped hundreds of companies to become more sustainable. Now we focus on circular economy and its tremendous potential in reducing CO₂ and improving profitability.
             </p>
-
-            <p className="text-white/80 mb-6 leading-relaxed max-w-xl">
-              We have recognised that despite efforts in the construction industry, focus on more sustainable concrete has been to reduce one of more raw materials, whereas we want to focus on circular economy and its tremendous potential in reducing CO2 and improving profitability.
-            </p>
-
-            <p className="text-white/80 mb-8 leading-relaxed max-w-xl">
-              Working together with inventors, university research and construction professionals we have developed a methodology, mixing and process to better utilise demolished concrete and produce stronger concrete, with less cement, less costs and significantly reduced carbon footprint.
-            </p>
-
-            <blockquote className="border-l-2 border-betolar-mid pl-4 italic text-white/80 mb-8">
-              — Jukka Mäkelä and Jarkko Hämäläinen, founders of Carbon Free Technologies
-            </blockquote>
-
             <button onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-6 py-3 bg-white text-betolar-primary rounded-lg font-medium hover:bg-slate-50 transition-colors">
-              Learn More
+              className="px-8 py-4 bg-cft-primary text-white rounded text-lg font-bold hover:bg-cft-dark transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+              Explore Our Solution
             </button>
-          </div>
+          </FadeInSection>
         </div>
       </section>
     );
 
-    // ========== SLIDE 2: STATS ==========
     const Stats = () => {
       const stats = [
-        { value: '10', label: 'years of R&D' },
-        { value: '200', label: 'years of combined sustainability leadership' },
-        { value: '30 %', label: 'of all waste – to be abolished' },
-        { value: '40%', label: 'reduction of CO2' },
-        { value: '10', label: 'stronger concrete' },
-        { value: '50-80%', label: 'lower aggregate related costs' },
+        { val: '10', label: 'years of R&D' },
+        { val: '200', label: 'years sustainability leadership' },
+        { val: '30%', label: 'waste abolished' },
+        { val: '40%', label: 'CO₂ reduction' },
+        { val: '10×', label: 'stronger concrete' },
+        { val: '50-80%', label: 'lower aggregate costs' }
       ];
 
       return (
-        <section id="stats" className="py-20 bg-white">
+        <section className="section-alt">
           <div className="container mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-ink text-center mb-4">Our Zero Waste Impact</h2>
-            <div className="w-12 h-0.5 bg-betolar-primary mx-auto mb-12"></div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {stats.map((s, i) => (
-                <div key={i} className="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="text-3xl md:text-4xl font-bold text-betolar-primary mb-2">
-                    {s.value}
+            <FadeInSection>
+              <h2 className="text-4xl text-cft-ink text-center mb-16">Our Zero Waste Impact</h2>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
+                {stats.map((s, i) => (
+                  <div key={i} className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-center">
+                    <div className="text-5xl font-bold text-cft-primary mb-3">{s.val}</div>
+                    <div className="text-cft-muted font-medium">{s.label}</div>
                   </div>
-                  <p className="text-muted text-sm">{s.label}</p>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-center text-muted mt-12 max-w-2xl mx-auto">
-              CFT is intriducing a wew way to thinking concrete production – providing holistic sustainable solutions based on circular economy methodologies and value chain management.
-            </p>
+                ))}
+              </div>
+            </FadeInSection>
           </div>
         </section>
       );
     };
 
-    // ========== SLIDE 3: ABOUT ==========
     const About = () => {
       const expertise = [
-        'Construction leadership',
-        'Concrete research',
-        'LEAN Management',
-        'Digital platform design',
-        'Structured finance',
-        'Global business management'
+        'Construction leadership', 'Concrete research', 'LEAN Management',
+        'Digital platform design', 'Structured finance', 'Global business management'
       ];
 
       return (
-        <section id="about" className="py-20 bg-surface">
+        <section id="about" className="section-alt">
           <div className="container mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-ink text-center mb-4">About Carbon Free Technologies</h2>
-            <div className="w-12 h-0.5 bg-betolar-primary mx-auto mb-12"></div>
-
-            <div className="grid md:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
-              <div>
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <FadeInSection>
                 <img
                   src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80"
-                  alt="Green leaves - sustainability"
-                  className="rounded-2xl shadow-sm mb-8"
+                  alt="Nature"
+                  className="rounded-2xl shadow-lg img-sharp mb-12"
                 />
-                <h3 className="text-lg font-semibold text-betolar-primary mb-4">Core Expertise</h3>
-                <ul className="space-y-3 mb-8">
+                <h3 className="text-2xl text-cft-primary mb-6">Core Expertise</h3>
+                <div className="grid sm:grid-cols-2 gap-4">
                   {expertise.map((e, i) => (
-                    <li key={i} className="flex items-center gap-3">
-                      <span className="w-1.5 h-1.5 bg-betolar-primary rounded-full"></span>
-                      <span className="text-muted">{e}</span>
-                    </li>
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-cft-primary"></div>
+                      <span className="font-medium text-cft-ink">{e}</span>
+                    </div>
                   ))}
-                </ul>
-              </div>
-
-              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
-                <p className="text-muted mb-4 leading-relaxed">
-                  Carbon Free Technologies (or "CFT) has developed patented solutions for creating recycled carbon neutral concrete utilising recycled construction demolition concrete waste mixed with fully bio-based application dependent additives ("RCA"). This solution is based on over 10 years of research and cooperation with universities, research institutes and other constituents. Producing the recycled concrete can be done both in concrete facilities and on-site.
-                </p>
-                <p className="text-muted mb-4 leading-relaxed">
-                  CFT combines its innovations with its AI driven digital platform that allows us to manage the entire RCA value chain – all based on on-boarding of customer requirements and matching that with applicable RCA, as well as creates a marketplace for service providers in the value chain to become a part of the solution – all from one integrated ecosystem, one single dashboard.
-                </p>
-                <p className="text-muted mb-4 leading-relaxed">
-                  CFT innovations combined with an AI driven digital platform provide a fully scalable holistics approach to sustainable concrete production instead of trying to solve only one challenge in the value chain. In today's environment providing such holistic circular economy solutions is the only option to solve the various financial and environmental challenges of producing concrete.
-                </p>
-                <p className="text-muted leading-relaxed">
-                  CFT was established by a team of sustainable business professionals with versatile backgrounds – from construction operations and other fields of business with unparallelled expertise.
-                </p>
-              </div>
-            </div>
-
-            {/* Key Points */}
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
-              {[
-                { title: 'Innovations', desc: 'More than 10 years of R&D' },
-                { title: 'Solution', desc: 'Replace aggregates with RCA combined with application-based additives and controlled value chain' },
-                { title: 'Impact', desc: 'Substantial reduction of waste, CO2 and materially stronger concrete – significantly cheaper' },
-                { title: 'Global', desc: 'Fully modular and scalable with planned projects and pilots in several countries globally' },
-                { title: 'Practical', desc: 'Compatible with existing equipment – no new capex required' },
-              ].map((p, i) => (
-                <div key={i} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-                  <h4 className="text-betolar-primary font-semibold mb-2">{p.title}</h4>
-                  <p className="text-muted text-sm">{p.desc}</p>
                 </div>
-              ))}
+              </FadeInSection>
+
+              <FadeInSection>
+                <div className="w-16 h-1 bg-cft-primary mb-8"></div>
+                <h2 className="text-4xl text-cft-ink mb-8">About Carbon Free Technologies</h2>
+                <div className="space-y-6 text-cft-muted text-lg">
+                  <p className="max-w-read">
+                    CFT has developed <strong className="text-cft-primary">patented solutions</strong> for creating recycled carbon neutral concrete utilising recycled construction demolition concrete waste mixed with fully bio-based additives ("RCA").
+                  </p>
+                  <p className="max-w-read">
+                    Based on over 10 years of research, our method creates stronger concrete with less cement, less costs, and a significantly reduced carbon footprint.
+                  </p>
+                  <p className="max-w-read">
+                    Our <strong className="text-cft-primary">AI driven digital platform</strong> allows us to manage the entire RCA value chain — creating a fully scalable holistic approach to sustainable concrete production.
+                  </p>
+                </div>
+              </FadeInSection>
             </div>
           </div>
         </section>
       );
     };
 
-    // ========== SLIDE 4-5: MARKET DEMAND ==========
     const Market = () => (
-      <section id="market" className="py-20 bg-white">
+      <section id="market" className="section-alt">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink text-center mb-4">Market Demand</h2>
-          <div className="w-12 h-0.5 bg-betolar-primary mx-auto mb-6"></div>
-          <p className="text-center text-muted max-w-3xl mx-auto mb-12">
-            Demand for circular economy solutions in concrete production is rapidly increasing due to need to reduce dependence on virgin materials and waste, to reduce the CO2 footprint in construction, have reliable access to raw materials and to lower costs.
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Environmental */}
-            <div className="bg-surface rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-ink mb-2">Current status is environmentally unbearable</h3>
-              <ul className="space-y-3 text-sm text-muted">
-                <li><span className="text-betolar-primary">•</span> Waste: Today concrete production accounts for 25-35% of all waste, depending on the country – CFT could fully utilize this waste</li>
-                <li><span className="text-betolar-primary">•</span> CO2: Concrete is one of largest sources of CO2 globally (largely due to cement production) – CFT could reduce the CO2 footprint</li>
-                <li><span className="text-betolar-primary">•</span> Biodiversity: Ability to replace sand and gravel in concrete would protects biodiversity – one of the corner stones in EU circular economy legislation</li>
-                <li><span className="text-betolar-primary">•</span> Other challenges: Numerous other environmental challenges can be mitigated, such as erosion, logistics, water pollution, etc.</li>
-              </ul>
-            </div>
-
-            {/* Global */}
-            <div className="bg-surface rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-ink mb-2">Global challenges beyond ESG</h3>
-              <ul className="space-y-3 text-sm text-muted">
-                <li><span className="text-betolar-primary">•</span> Lack of access: Having access to suitable aggregates for concrete has become more challenging – creating conflicts even between nations</li>
-                <li><span className="text-betolar-primary">•</span> Aggregate imports: Aggregate imports are increasing creating challenges in logistics, scheduling, and costs – in addition to the environmental burden</li>
-                <li><span className="text-betolar-primary">•</span> Criminal behavior: Illegal sand mining is becoming one of largest organized criminal activities in various regions</li>
-                <li><span className="text-betolar-primary">•</span> Other challenges: Cost of logistics, increased lead times lack of efficiency and other project management concerns have become a major challenge</li>
-              </ul>
-            </div>
-
-            {/* Financial */}
-            <div className="bg-surface rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-ink mb-2">Financial opportunities relating to circular economy</h3>
-              <ul className="space-y-3 text-sm text-muted">
-                <li><span className="text-betolar-primary">•</span> USD +600bn industry: Continuously increasing demand for aggregates has created a USD +600 billion industry with demand for circular economy</li>
-                <li><span className="text-betolar-primary">•</span> Cheaper: Aggregate Replacing virgin aggregates with RCA Aggregates can offer a significantly cheaper alternative</li>
-                <li><span className="text-betolar-primary">•</span> Cost savings: Costs savings relating to aggregates, logistics, faster lead times, project management, on-site solutions significantly reduce project costs</li>
-                <li><span className="text-betolar-primary">•</span> CO2 reduction to profit: Being able to reduce CO2 by 0.1 tons per cubic meter of concrete can offer new avenues for additional profitability</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    // ========== SLIDE 6: SOLUTION ==========
-    const Solution = () => (
-      <section id="solution" className="py-20 bg-surface">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink text-center mb-4">Solution & Process</h2>
-          <div className="w-12 h-0.5 bg-betolar-primary mx-auto mb-6"></div>
-          <p className="text-center text-muted max-w-3xl mx-auto mb-12">
-            Customer need drives generation of RCA (size and type of crushed concrete, type of additives, mixing plans, etc.). On-boarding requirements and specifications from customers relating to the end-user applications are used to optimise the generation of RCA from CDW to replace aggregates when producing new concrete. AI driven digital platform helps to manage the entire RCA value chain for access, costs and quality control.
-          </p>
-
-          {/* Process Steps */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12 max-w-4xl mx-auto">
-            {[
-              { num: '1', title: 'Imaging and Certify', desc: 'Data gathering' },
-              { num: '2', title: 'Classify and Process', desc: 'AI Driven' },
-              { num: '3', title: 'Crushing & Sieving', desc: 'equipment today' },
-              { num: '4', title: 'Mixing & Additives', desc: 'global access' },
-              { num: '5', title: 'RCA Concrete', desc: 'application-based mix & methodology' },
-            ].map((s, i) => (
-              <div key={i} className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-betolar-primary text-white flex items-center justify-center font-semibold">
-                  {s.num}
-                </div>
-                <div className="ml-3">
-                  <div className="font-medium text-ink text-sm">{s.title}</div>
-                  <div className="text-xs text-muted">{s.desc}</div>
-                </div>
-                {i < 4 && (
-                  <svg className="w-5 h-5 text-slate-300 mx-3 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Input/Output */}
-          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
-              <div className="text-xs font-medium text-muted uppercase mb-2">Input</div>
-              <div className="font-medium text-ink">Project owners and contractors</div>
-              <div className="text-muted text-sm">On-boarding Applications & specifications</div>
-            </div>
-            <div className="p-6 bg-white rounded-2xl border border-betolar-primary shadow-sm">
-              <div className="text-xs font-medium text-betolar-primary uppercase mb-2">Output</div>
-              <div className="font-medium text-ink">RCA Concrete</div>
-              <div className="text-muted text-sm">application-based mix & methodology</div>
-            </div>
-          </div>
-
-          {/* Process Image */}
-          <div className="mt-12 max-w-4xl mx-auto">
-            <img
-              src="https://images.unsplash.com/photo-1518005068251-37900150dfca?w=1200&q=80"
-              alt="Sustainable construction"
-              className="w-full rounded-2xl shadow-sm"
-            />
-          </div>
-        </div>
-      </section>
-    );
-
-    // ========== SLIDE 7: IMPACT ==========
-    const Impact = () => (
-      <section id="impact" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink text-center mb-4">Real-Life Impact</h2>
-          <div className="w-12 h-0.5 bg-betolar-primary mx-auto mb-12"></div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Waste & Control */}
-            <div className="bg-surface rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-betolar-primary mb-4">Real-life on-site circular economy solution</h3>
-              <ul className="space-y-2 text-muted text-sm">
-                <li>• Reduce up to 25-30% of all waste</li>
-                <li>• Controlled RCA value chain</li>
-                <li>• Controlled auditive base CDW concrete</li>
-                <li>• Tangible savings from cost of raw materials, logistics costs and waste management expenses</li>
-              </ul>
-            </div>
-
-            {/* CO2 */}
-            <div className="bg-surface rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-betolar-primary mb-4">CO2 reductions are substantial (ca. 40%)</h3>
-              <ul className="space-y-2 text-muted text-sm">
-                <li>• Less cement needed</li>
-                <li>• Additives tie in more CO2</li>
-                <li>• CO2 required to provide traditional aggregates</li>
-                <li>• Less logistics</li>
-              </ul>
-            </div>
-
-            {/* Time */}
-            <div className="bg-surface rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-betolar-primary mb-4">Significant time savings</h3>
-              <p className="text-muted text-sm">from on-site concrete production and the logistical burden</p>
-            </div>
-
-            {/* Profit */}
-            <div className="bg-surface rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-betolar-primary mb-4">Turning CO2 savings into profits</h3>
-              <p className="text-muted text-sm">over 0.1 tonne carbon savings per 1m³ of concrete</p>
-            </div>
-          </div>
-
-          {/* Circular Economy Image */}
-          <div className="mt-12 max-w-2xl mx-auto">
-            <img
-              src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&q=80"
-              alt="Recycling - circular economy"
-              className="w-full rounded-2xl shadow-sm"
-            />
-          </div>
-        </div>
-      </section>
-    );
-
-    // ========== SLIDE 8: TEAM ==========
-    const Team = () => (
-      <section id="team" className="py-20 bg-surface relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 opacity-[0.15]">
-          <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80"
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        <div className="container mx-auto px-6 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink text-center mb-4">Team and Advisors</h2>
-          <div className="w-12 h-0.5 bg-betolar-primary mx-auto mb-6"></div>
-          <p className="text-center text-muted max-w-3xl mx-auto mb-12">
-            CFT has an exceptional team consisting of sustainable business professionals with complementary capabilities – both among the core team members and the senior advisors. CFT markets access is built on relationships at selected markets, established support, operational partners, as well as financing and security. It is our approach to meet and speak with everyone - from janitors to officials.
-          </p>
-
-          <h3 className="text-xl font-semibold text-ink text-center mb-8">Core team</h3>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-4xl mx-auto mb-16">
-            {['Jukka Mäkelä', 'Jarkko Hämäläinen', 'Pekka Mairinoja', 'Sami Niku-Paavo', 'Teppo Rauhala'].map((name, i) => (
-              <div key={i} className="text-center">
-                <div className="w-20 h-20 rounded-full bg-betolar-primary mx-auto mb-3 flex items-center justify-center">
-                  <span className="text-white text-2xl font-semibold">{name.charAt(0)}</span>
-                </div>
-                <div className="font-medium text-ink text-sm">{name}</div>
-              </div>
-            ))}
-          </div>
-
-          <h3 className="text-xl font-semibold text-ink text-center mb-8">Senior advisors</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-            {['Laird Cagan', 'Aitua Ekhaese', 'Anthony Rampensaud', 'Rauno Heikkilä', 'Kari-Pekka Laaksonen', 'Juuso Manninen', 'Kyle Douglas', 'David Gottfried'].map((name, i) => (
-              <div key={i} className="bg-white rounded-2xl p-4 text-center border border-slate-200 shadow-sm">
-                <div className="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-2 flex items-center justify-center">
-                  <span className="text-muted font-medium">{name.charAt(0)}</span>
-                </div>
-                <div className="text-sm text-ink">{name}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-
-    // ========== FOOTER ==========
-    const Footer = () => (
-      <footer id="contact" className="bg-betolar-dark text-white">
-        <div className="py-20">
-          <div className="container mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Let's Build a Sustainable Future Together
-            </h2>
-            <p className="text-white/70 max-w-xl mx-auto mb-8">
-              Contact us to learn how Carbon Free Technologies can transform your concrete production with circular economy solutions.
+          <FadeInSection className="text-center mb-16">
+            <h2 className="text-4xl text-cft-ink mb-6">Market Demand</h2>
+            <p className="max-w-read mx-auto text-cft-muted text-lg">
+              Demand for circular economy solutions is rapidly increasing. The current status is environmentally unbearable, and new financial opportunities are emerging.
             </p>
-            <a href="mailto:info@carbonfreetech.fi"
-              className="inline-block px-6 py-3 bg-white text-betolar-primary rounded-lg font-medium hover:bg-slate-50 transition-colors">
-              Contact Us
-            </a>
+          </FadeInSection>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { title: "Environmental Crisis", points: ["Concrete is 25-35% of all waste", "One of largest CO2 sources globally", "Sand mining threatens biodiversity"] },
+              { title: "Global Challenges", points: ["Lack of access to suitable aggregates", "Increasing aggregate import costs", "Illegal mining & criminal activity"] },
+              { title: "Financial Opportunity", points: ["USD +600bn aggregate industry", "RCA is a significantly cheaper alternative", "CO2 reduction offers new profit avenues"] }
+            ].map((col, i) => (
+              <FadeInSection key={i}>
+                <div className="h-full p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-xl font-bold text-cft-ink mb-6">{col.title}</h3>
+                  <ul className="space-y-4">
+                    {col.points.map((p, j) => (
+                      <li key={j} className="flex gap-3 text-cft-muted">
+                        <span className="text-cft-primary font-bold">•</span>
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </FadeInSection>
+            ))}
           </div>
         </div>
+      </section>
+    );
 
-        <div className="border-t border-white/10 py-6">
-          <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="font-semibold text-sm">CARBON FREE TECHNOLOGIES</span>
-            <span className="text-white/50 text-sm">© {new Date().getFullYear()} CFT. All rights reserved.</span>
+    const Solution = () => (
+      <section id="solution" className="section-alt">
+        <div className="container mx-auto px-6">
+          <FadeInSection className="text-center mb-20">
+            <h2 className="text-4xl text-cft-ink mb-6">Solution & Process</h2>
+            <p className="max-w-read mx-auto text-cft-muted text-lg">
+              We optimize generation of RCA from demolition waste to replace aggregates. Our AI-driven platform manages the value chain for access, costs, and quality.
+            </p>
+          </FadeInSection>
+
+          <FadeInSection>
+            <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-4 mb-20">
+              {[
+                { n: '1', t: 'Imaging', d: 'Data gathering' },
+                { n: '2', t: 'Classify', d: 'AI Driven' },
+                { n: '3', t: 'Crushing', d: 'Equipment today' },
+                { n: '4', t: 'Mixing', d: 'Global access' },
+                { n: '5', t: 'Concrete', d: 'App-based mix' },
+              ].map((s, i) => (
+                <div key={i} className="text-center p-4">
+                  <div className="w-16 h-16 mx-auto bg-cft-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4 shadow-lg">{s.n}</div>
+                  <div className="font-bold text-cft-ink">{s.t}</div>
+                  <div className="text-sm text-cft-muted">{s.d}</div>
+                </div>
+              ))}
+            </div>
+
+            <img src="https://images.unsplash.com/photo-1518005068251-37900150dfca?w=1200&q=80" className="w-full rounded-2xl shadow-xl img-sharp" alt="Process" />
+          </FadeInSection>
+        </div>
+      </section>
+    );
+
+    const Team = () => (
+      <section id="team" className="section-alt relative">
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80" className="w-full h-full object-cover grayscale" />
+        </div>
+        <div className="container mx-auto px-6 relative">
+          <FadeInSection className="text-center mb-16">
+            <h2 className="text-4xl text-cft-ink mb-6">Execution Team</h2>
+            <p className="max-w-read mx-auto text-cft-muted text-lg">
+              An exceptional team of sustainable business professionals with complementary capabilities, supported by a global network of senior advisors.
+            </p>
+          </FadeInSection>
+
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
+            {['Jukka Mäkelä', 'Jarkko Hämäläinen', 'Pekka Mairinoja', 'Sami Niku-Paavo', 'Teppo Rauhala'].map((n, i) => (
+              <FadeInSection key={i} className="text-center group">
+                <div className="w-24 h-24 mx-auto bg-white rounded-full border-2 border-cft-primary flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform">
+                  <span className="text-2xl font-bold text-cft-primary">{n.charAt(0)}</span>
+                </div>
+                <div className="font-bold text-cft-ink">{n}</div>
+              </FadeInSection>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const Footer = () => (
+      <footer className="bg-cft-ink text-white py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-16">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold tracking-wide">Carbon Free Technologies</h3>
+              <p className="text-gray-400 max-w-xs">Revolutionizing concrete production with circular economy solutions.</p>
+            </div>
+
+            <div>
+              <h4 className="font-bold mb-6 text-lg text-cft-primary">Contact</h4>
+              <ul className="space-y-4 text-gray-300">
+                <li><a href="mailto:info@carbonfreetech.fi" className="hover:text-white transition-colors">info@carbonfreetech.fi</a></li>
+                <li>Espoo, Finland</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-bold mb-6 text-lg text-cft-primary">Connect</h4>
+              <a href="#" className="inline-block text-gray-300 hover:text-white transition-colors">LinkedIn</a>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 mt-20 pt-8 text-center text-gray-500 text-sm">
+            © {new Date().getFullYear()} Carbon Free Technologies. All rights reserved.
           </div>
         </div>
       </footer>
     );
 
-    // ========== APP ==========
     const App = () => (
-      <div className="min-h-screen">
+      <div className="overflow-x-hidden">
         <Navbar />
         <Hero />
         <Stats />
         <About />
         <Market />
         <Solution />
-        <Impact />
         <Team />
         <Footer />
       </div>
     );
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 
