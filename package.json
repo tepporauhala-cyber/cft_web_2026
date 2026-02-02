@@ -1,9 +1,9 @@
 {
-  "name": "carbon-free-technologies",
+  "name": "cft_web",
   "version": "1.0.0",
-  "description": "Carbon Free Technologies - CleanTech Website",
+  "description": "",
   "scripts": {
-    "start": "npx serve .",
-    "build": "echo 'Static site - no build needed'"
+    "build": "rm -rf dist && mkdir -p dist && cp index.html dist/index.html && cp -r images dist/images && cp *.png dist/ 2>/dev/null || true",
+    "start": "npx serve dist"
   }
 }
