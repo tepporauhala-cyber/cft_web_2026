@@ -73,9 +73,11 @@
       line-height: 1.1;
     }
 
-    .nav-sticky {
-      position: sticky;
+    .nav-fixed {
+      position: fixed;
       top: 0;
+      left: 0;
+      width: 100%;
       z-index: 1000;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
@@ -147,7 +149,7 @@
       const links = ['about', 'market', 'solution', 'team'];
 
       return (
-        <nav className="nav-sticky py-6">
+        <nav className="nav-fixed py-6">
           <div className="container mx-auto px-6 flex justify-between items-center">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollTo('hero')}>
               <div className="w-10 h-10 rounded bg-cft-primary flex items-center justify-center shadow-lg">
@@ -191,7 +193,7 @@
     };
 
     const Hero = () => (
-      <section id="hero" className="section-alt relative h-screen flex items-center p-0!">
+      <section id="hero" className="section-alt relative h-screen flex items-center" style={{ padding: 0 }}>
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?w=1920&q=80" alt="Landscape" className="w-full h-full object-cover img-sharp" />
           <div className="absolute inset-0 hero-overlay"></div>
