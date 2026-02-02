@@ -17,25 +17,24 @@
         extend: {
           colors: {
             'cft': {
-              'primary': '#2E7D32',  /* Priority 4: Accent Color */
-              'dark': '#1B5E20',     /* Hover state */
+              'primary': '#2E7D32',
+              'dark': '#1B5E20',
               'ink': '#0f172a',
               'muted': '#475569',
-              'surface': '#f8f9fa'   /* Alternating bg color */
+              'surface': '#f8f9fa'
             }
           },
           fontFamily: {
-            'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'] /* Priority 2 */
+            'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif']
           },
           maxWidth: {
-            'read': '680px' /* Priority 2: Readable text width */
+            'read': '800px'
           }
         }
       }
     }
   </script>
   <style>
-    /* Priority 2: Typography & Base */
     body {
       font-family: 'Inter', sans-serif;
       line-height: 1.7;
@@ -52,10 +51,8 @@
 
     section {
       padding: 100px 0;
-      /* Priority 2: Breathing room */
     }
 
-    /* Priority 3: Alternating Backgrounds */
     .section-alt:nth-child(odd) {
       background-color: #ffffff;
     }
@@ -64,7 +61,6 @@
       background-color: #f8f9fa;
     }
 
-    /* Priority 1: Hero Specifics */
     .hero-overlay {
       background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
     }
@@ -77,7 +73,6 @@
       line-height: 1.1;
     }
 
-    /* Priority 3: Sticky Nav */
     .nav-sticky {
       position: sticky;
       top: 0;
@@ -88,13 +83,11 @@
       transition: all 0.3s ease;
     }
 
-    /* Priority 4: Visual Anchoring */
     .img-sharp {
       image-rendering: -webkit-optimize-contrast;
       filter: contrast(1.05) saturate(1.1);
     }
 
-    /* Priority 5: Animations */
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
@@ -118,7 +111,6 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // Hook for visibility animation
     const useFadeIn = () => {
       const domRef = useRef();
       useEffect(() => {
@@ -148,12 +140,10 @@
 
     const Navbar = () => {
       const [menuOpen, setMenuOpen] = useState(false);
-
       const scrollTo = (id) => {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
         setMenuOpen(false);
       };
-
       const links = ['about', 'market', 'solution', 'team'];
 
       return (
@@ -212,9 +202,21 @@
             <h1 className="hero-title text-white mb-8">
               Circular Economy Concrete – <br />40% Less CO₂, Today
             </h1>
-            <p className="text-xl text-white/95 mb-10 leading-relaxed max-w-2xl font-medium drop-shadow-md">
-              Over the past 10 years, we have led, advised, and helped hundreds of companies to become more sustainable. Now we focus on circular economy and its tremendous potential in reducing CO₂ and improving profitability.
+
+            <p className="text-lg text-white/95 mb-6 leading-relaxed max-w-2xl font-medium drop-shadow-md">
+              Over the past 10 years, we have led, advised, and helped hundreds of companies to develop and grow their business and succeed in the global market and at the same time become more sustainable. It is our passion to help companies grow and succeed sustainably.
             </p>
+            <p className="text-lg text-white/95 mb-6 leading-relaxed max-w-2xl font-medium drop-shadow-md">
+              We have recognised that despite efforts in the construction industry, focus on more sustainable concrete has been to reduce one of more raw materials, whereas we want to focus on circular economy and its tremendous potential in reducing CO₂ and improving profitability.
+            </p>
+            <p className="text-lg text-white/95 mb-10 leading-relaxed max-w-2xl font-medium drop-shadow-md">
+              Working together with inventors, university research and construction professionals we have developed a methodology, mixing and process to better utilise demolished concrete and produce stronger concrete, with less cement, less costs and significantly reduced carbon footprint.
+            </p>
+
+            <blockquote className="border-l-4 border-cft-primary pl-6 italic text-white/90 mb-10 text-lg">
+              — Jukka Mäkelä and Jarkko Hämäläinen, founders of Carbon Free Technologies
+            </blockquote>
+
             <button onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
               className="px-8 py-4 bg-cft-primary text-white rounded text-lg font-bold hover:bg-cft-dark transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
               Explore Our Solution
@@ -227,11 +229,11 @@
     const Stats = () => {
       const stats = [
         { val: '10', label: 'years of R&D' },
-        { val: '200', label: 'years sustainability leadership' },
-        { val: '30%', label: 'waste abolished' },
-        { val: '40%', label: 'CO₂ reduction' },
-        { val: '10×', label: 'stronger concrete' },
-        { val: '50-80%', label: 'lower aggregate costs' }
+        { val: '200', label: 'years of combined sustainability leadership' },
+        { val: '30 %', label: 'of all waste – to be abolished' },
+        { val: '40%', label: 'reduction of CO₂' },
+        { val: '10', label: 'stronger concrete' },
+        { val: '50-80%', label: 'lower aggregate related costs' }
       ];
 
       return (
@@ -247,6 +249,9 @@
                   </div>
                 ))}
               </div>
+              <p className="text-center text-cft-muted mt-12 max-w-2xl mx-auto text-lg">
+                CFT is intriducing a wew way to thinking concrete production – providing holistic sustainable solutions based on circular economy methodologies and value chain management.
+              </p>
             </FadeInSection>
           </div>
         </section>
@@ -262,7 +267,7 @@
       return (
         <section id="about" className="section-alt">
           <div className="container mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
               <FadeInSection>
                 <img
                   src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80"
@@ -285,17 +290,38 @@
                 <h2 className="text-4xl text-cft-ink mb-8">About Carbon Free Technologies</h2>
                 <div className="space-y-6 text-cft-muted text-lg">
                   <p className="max-w-read">
-                    CFT has developed <strong className="text-cft-primary">patented solutions</strong> for creating recycled carbon neutral concrete utilising recycled construction demolition concrete waste mixed with fully bio-based additives ("RCA").
+                    Carbon Free Technologies (or "CFT) has developed <strong className="text-cft-primary">patented solutions</strong> for creating recycled carbon neutral concrete utilising recycled construction demolition concrete waste mixed with fully bio-based application dependent additives ("RCA"). This solution is based on over 10 years of research and cooperation with universities, research institutes and other constituents. Producing the recycled concrete can be done both in concrete facilities and on-site.
                   </p>
                   <p className="max-w-read">
-                    Based on over 10 years of research, our method creates stronger concrete with less cement, less costs, and a significantly reduced carbon footprint.
+                    CFT combines its innovations with its <strong className="text-cft-primary">AI driven digital platform</strong> that allows us to manage the entire RCA value chain – all based on on-boarding of customer requirements and matching that with applicable RCA, as well as creates a marketplace for service providers in the value chain to become a part of the solution – all from one integrated ecosystem, one single dashboard.
                   </p>
                   <p className="max-w-read">
-                    Our <strong className="text-cft-primary">AI driven digital platform</strong> allows us to manage the entire RCA value chain — creating a fully scalable holistic approach to sustainable concrete production.
+                    CFT innovations combined with an AI driven digital platform provide a fully scalable holistics approach to sustainable concrete production instead of trying to solve only one challenge in the value chain. In today's environment providing such holistic circular economy solutions is the only option to solve the various financial and environmental challenges of producing concrete.
+                  </p>
+                  <p className="max-w-read">
+                    CFT was established by a team of sustainable business professionals with versatile backgrounds – from construction operations and other fields of business with unparallelled expertise.
                   </p>
                 </div>
               </FadeInSection>
             </div>
+
+            {/* Key Points */}
+            <FadeInSection className="mt-20">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                {[
+                  { title: 'Innovations', desc: 'More than 10 years of R&D' },
+                  { title: 'Solution', desc: 'Replace aggregates with RCA combined with application-based additives and controlled value chain' },
+                  { title: 'Impact', desc: 'Substantial reduction of waste, CO2 and materially stronger concrete – significantly cheaper' },
+                  { title: 'Global', desc: 'Fully modular and scalable with planned projects and pilots in several countries globally' },
+                  { title: 'Practical', desc: 'Compatible with existing equipment – no new capex required' },
+                ].map((p, i) => (
+                  <div key={i} className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                    <h4 className="text-cft-primary font-bold mb-2">{p.title}</h4>
+                    <p className="text-cft-muted text-sm">{p.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </FadeInSection>
           </div>
         </section>
       );
@@ -306,31 +332,68 @@
         <div className="container mx-auto px-6">
           <FadeInSection className="text-center mb-16">
             <h2 className="text-4xl text-cft-ink mb-6">Market Demand</h2>
-            <p className="max-w-read mx-auto text-cft-muted text-lg">
-              Demand for circular economy solutions is rapidly increasing. The current status is environmentally unbearable, and new financial opportunities are emerging.
+            <p className="max-w-3xl mx-auto text-cft-muted text-lg">
+              Demand for circular economy solutions in concrete production is rapidly increasing due to need to reduce dependence on virgin materials and waste, to reduce the CO2 footprint in construction, have reliable access to raw materials and to lower costs.
             </p>
           </FadeInSection>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { title: "Environmental Crisis", points: ["Concrete is 25-35% of all waste", "One of largest CO2 sources globally", "Sand mining threatens biodiversity"] },
-              { title: "Global Challenges", points: ["Lack of access to suitable aggregates", "Increasing aggregate import costs", "Illegal mining & criminal activity"] },
-              { title: "Financial Opportunity", points: ["USD +600bn aggregate industry", "RCA is a significantly cheaper alternative", "CO2 reduction offers new profit avenues"] }
-            ].map((col, i) => (
-              <FadeInSection key={i}>
-                <div className="h-full p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-bold text-cft-ink mb-6">{col.title}</h3>
-                  <ul className="space-y-4">
-                    {col.points.map((p, j) => (
-                      <li key={j} className="flex gap-3 text-cft-muted">
-                        <span className="text-cft-primary font-bold">•</span>
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </FadeInSection>
-            ))}
+            <FadeInSection>
+              <div className="h-full p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-bold text-cft-ink mb-6">Current status is environmentally unbearable</h3>
+                <ul className="space-y-4">
+                  {[
+                    "Waste: Today concrete production accounts for 25-35% of all waste, depending on the country – CFT could fully utilize this waste",
+                    "CO2: Concrete is one of largest sources of CO2 globally (largely due to cement production) – CFT could reduce the CO2 footprint",
+                    "Biodiversity: Ability to replace sand and gravel in concrete would protects biodiversity – one of the corner stones in EU circular economy legislation",
+                    "Other challenges: Numerous other environmental challenges can be mitigated, such as erosion, logistics, water pollution, etc."
+                  ].map((p, j) => (
+                    <li key={j} className="flex gap-3 text-cft-muted text-sm">
+                      <span className="text-cft-primary font-bold">•</span>
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </FadeInSection>
+
+            <FadeInSection>
+              <div className="h-full p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-bold text-cft-ink mb-6">Global challenges beyond ESG</h3>
+                <ul className="space-y-4">
+                  {[
+                    "Lack of access: Having access to suitable aggregates for concrete has become more challenging – creating conflicts even between nations",
+                    "Aggregate imports: Aggregate imports are increasing creating challenges in logistics, scheduling, and costs – in addition to the environmental burden",
+                    "Criminal behavior: Illegal sand mining is becoming one of largest organized criminal activities in various regions",
+                    "Other challenges: Cost of logistics, increased lead times lack of efficiency and other project management concerns have become a major challenge"
+                  ].map((p, j) => (
+                    <li key={j} className="flex gap-3 text-cft-muted text-sm">
+                      <span className="text-cft-primary font-bold">•</span>
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </FadeInSection>
+
+            <FadeInSection>
+              <div className="h-full p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-bold text-cft-ink mb-6">Financial opportunities relating to circular economy</h3>
+                <ul className="space-y-4">
+                  {[
+                    "USD +600bn industry: Continuously increasing demand for aggregates has created a USD +600 billion industry with demand for circular economy",
+                    "Cheaper: Aggregate Replacing virgin aggregates with RCA Aggregates can offer a significantly cheaper alternative",
+                    "Cost savings: Costs savings relating to aggregates, logistics, faster lead times, project management, on-site solutions significantly reduce project costs",
+                    "CO2 reduction to profit: Being able to reduce CO2 by 0.1 tons per cubic meter of concrete can offer new avenues for additional profitability"
+                  ].map((p, j) => (
+                    <li key={j} className="flex gap-3 text-cft-muted text-sm">
+                      <span className="text-cft-primary font-bold">•</span>
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </FadeInSection>
           </div>
         </div>
       </section>
@@ -341,19 +404,22 @@
         <div className="container mx-auto px-6">
           <FadeInSection className="text-center mb-20">
             <h2 className="text-4xl text-cft-ink mb-6">Solution & Process</h2>
-            <p className="max-w-read mx-auto text-cft-muted text-lg">
-              We optimize generation of RCA from demolition waste to replace aggregates. Our AI-driven platform manages the value chain for access, costs, and quality.
+            <p className="max-w-3xl mx-auto text-cft-muted text-lg mb-8">
+              Customer need drives generation of RCA (size and type of crushed concrete, type of additives, mixing plans, etc.). On-boarding requirements and specifications from customers relating to the end-user applications are used to optimise the generation of RCA from CDW to replace aggregates when producing new concrete.
+            </p>
+            <p className="max-w-3xl mx-auto text-cft-muted text-lg">
+              AI driven digital platform helps to manage the entire RCA value chain for access, costs and quality control.
             </p>
           </FadeInSection>
 
           <FadeInSection>
             <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-4 mb-20">
               {[
-                { n: '1', t: 'Imaging', d: 'Data gathering' },
-                { n: '2', t: 'Classify', d: 'AI Driven' },
-                { n: '3', t: 'Crushing', d: 'Equipment today' },
-                { n: '4', t: 'Mixing', d: 'Global access' },
-                { n: '5', t: 'Concrete', d: 'App-based mix' },
+                { n: '1', t: 'Imaging and Certify', d: 'Data gathering' },
+                { n: '2', t: 'Classify and Process', d: 'AI Driven' },
+                { n: '3', t: 'Crushing & Sieving', d: 'equipment today' },
+                { n: '4', t: 'Mixing & Additives', d: 'global access' },
+                { n: '5', t: 'RCA Concrete', d: 'application-based mix & methodology' },
               ].map((s, i) => (
                 <div key={i} className="text-center p-4">
                   <div className="w-16 h-16 mx-auto bg-cft-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4 shadow-lg">{s.n}</div>
@@ -363,7 +429,62 @@
               ))}
             </div>
 
-            <img src="https://images.unsplash.com/photo-1518005068251-37900150dfca?w=1200&q=80" className="w-full rounded-2xl shadow-xl img-sharp" alt="Process" />
+            {/* Input/Output */}
+            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-20">
+              <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm text-center">
+                <div className="text-xs font-bold text-cft-muted uppercase mb-2">Input</div>
+                <div className="font-bold text-cft-ink text-lg">Project owners and contractors</div>
+                <div className="text-cft-muted text-sm">On-boarding Applications & specifications</div>
+              </div>
+              <div className="p-6 bg-white rounded-2xl border-2 border-cft-primary shadow-sm text-center">
+                <div className="text-xs font-bold text-cft-primary uppercase mb-2">Output</div>
+                <div className="font-bold text-cft-ink text-lg">RCA Concrete</div>
+                <div className="text-cft-muted text-sm">application-based mix & methodology</div>
+              </div>
+            </div>
+
+            <img src="https://images.unsplash.com/photo-1518005068251-37900150dfca?w=1200&q=80" className="w-full rounded-2xl shadow-xl img-sharp mb-20" alt="Process" />
+          </FadeInSection>
+
+          {/* Real-Life Impact Section */}
+          <FadeInSection>
+            <h3 className="text-3xl font-bold text-cft-ink text-center mb-12">Real-Life Impact</h3>
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                <h4 className="font-bold text-cft-primary mb-4 text-xl">Real-life on-site circular economy solution</h4>
+                <ul className="space-y-2 text-cft-muted">
+                  <li>• Reduce up to 25-30% of all waste</li>
+                  <li>• Controlled RCA value chain</li>
+                  <li>• Controlled auditive base CDW concrete</li>
+                  <li>• Tangible savings from cost of raw materials, logistics costs and waste management expenses</li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                <h4 className="font-bold text-cft-primary mb-4 text-xl">CO2 reductions are substantial (ca. 40%)</h4>
+                <ul className="space-y-2 text-cft-muted">
+                  <li>• Less cement needed</li>
+                  <li>• Additives tie in more CO2</li>
+                  <li>• CO2 required to provide traditional aggregates</li>
+                  <li>• Less logistics</li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                <h4 className="font-bold text-cft-primary mb-4 text-xl">Significant time savings</h4>
+                <p className="text-cft-muted">from on-site concrete production and the logistical burden</p>
+              </div>
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                <h4 className="font-bold text-cft-primary mb-4 text-xl">Turning CO2 savings into profits</h4>
+                <p className="text-cft-muted">over 0.1 tonne carbon savings per 1m³ of concrete</p>
+              </div>
+            </div>
+
+            <div className="mt-12 max-w-2xl mx-auto">
+              <img
+                src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&q=80"
+                alt="Recycling - circular economy"
+                className="w-full rounded-2xl shadow-sm"
+              />
+            </div>
           </FadeInSection>
         </div>
       </section>
@@ -376,22 +497,39 @@
         </div>
         <div className="container mx-auto px-6 relative">
           <FadeInSection className="text-center mb-16">
-            <h2 className="text-4xl text-cft-ink mb-6">Execution Team</h2>
-            <p className="max-w-read mx-auto text-cft-muted text-lg">
-              An exceptional team of sustainable business professionals with complementary capabilities, supported by a global network of senior advisors.
+            <h2 className="text-4xl text-cft-ink mb-6">Team and Advisors</h2>
+            <p className="max-w-3xl mx-auto text-cft-muted text-lg">
+              CFT has an exceptional team consisting of sustainable business professionals with complementary capabilities, supported by a global network of senior advisors. CFT markets access is built on relationships at selected markets, established support, operational partners, as well as financing and security. It is our approach to meet and speak with everyone - from janitors to officials.
             </p>
           </FadeInSection>
 
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
-            {['Jukka Mäkelä', 'Jarkko Hämäläinen', 'Pekka Mairinoja', 'Sami Niku-Paavo', 'Teppo Rauhala'].map((n, i) => (
-              <FadeInSection key={i} className="text-center group">
-                <div className="w-24 h-24 mx-auto bg-white rounded-full border-2 border-cft-primary flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform">
-                  <span className="text-2xl font-bold text-cft-primary">{n.charAt(0)}</span>
+          <FadeInSection>
+            <h3 className="text-2xl font-bold text-cft-ink text-center mb-8">Core Team</h3>
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 max-w-6xl mx-auto mb-20">
+              {['Jukka Mäkelä', 'Jarkko Hämäläinen', 'Pekka Mairinoja', 'Sami Niku-Paavo', 'Teppo Rauhala'].map((n, i) => (
+                <div key={i} className="text-center group">
+                  <div className="w-24 h-24 mx-auto bg-white rounded-full border-2 border-cft-primary flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform">
+                    <span className="text-2xl font-bold text-cft-primary">{n.charAt(0)}</span>
+                  </div>
+                  <div className="font-bold text-cft-ink">{n}</div>
                 </div>
-                <div className="font-bold text-cft-ink">{n}</div>
-              </FadeInSection>
-            ))}
-          </div>
+              ))}
+            </div>
+          </FadeInSection>
+
+          <FadeInSection>
+            <h3 className="text-2xl font-bold text-cft-ink text-center mb-8">Senior Advisors</h3>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {['Laird Cagan', 'Aitua Ekhaese', 'Anthony Rampensaud', 'Rauno Heikkilä', 'Kari-Pekka Laaksonen', 'Juuso Manninen', 'Kyle Douglas', 'David Gottfried'].map((n, i) => (
+                <div key={i} className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
+                  <div className="w-12 h-12 mx-auto bg-gray-50 rounded-full flex items-center justify-center mb-3">
+                    <span className="text-cft-muted font-bold">{n.charAt(0)}</span>
+                  </div>
+                  <div className="font-semibold text-cft-ink text-sm">{n}</div>
+                </div>
+              ))}
+            </div>
+          </FadeInSection>
         </div>
       </section>
     );
