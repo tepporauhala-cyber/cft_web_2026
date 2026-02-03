@@ -174,7 +174,7 @@
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
         setMenuOpen(false);
       };
-      const links = ['home', 'about us', 'solution', 'market', 'services', 'team', 'contact'];
+      const links = ['home', 'about us', 'our story', 'solution', 'market', 'services', 'team', 'contact'];
 
       return (
         <nav
@@ -193,13 +193,23 @@
 
             <div className="hidden lg:flex items-center gap-8">
               {links.map(id => (
-                <button
-                  key={id}
-                  onClick={() => scrollTo(id === 'home' ? 'hero' : id.split(' ')[0])}
-                  className={`font-bold uppercase tracking-wide text-sm transition-colors ${scrolled ? 'text-cft-ink hover:text-cft-primary' : 'text-white/90 hover:text-white drop-shadow-sm'}`}
-                >
-                  {id}
-                </button>
+                id === 'our story' ? (
+                  <a
+                    key={id}
+                    href="our-story.html"
+                    className={`font-bold uppercase tracking-wide text-sm transition-colors ${scrolled ? 'text-cft-ink hover:text-cft-primary' : 'text-white/90 hover:text-white drop-shadow-sm'}`}
+                  >
+                    {id}
+                  </a>
+                ) : (
+                  <button
+                    key={id}
+                    onClick={() => scrollTo(id === 'home' ? 'hero' : id.split(' ')[0])}
+                    className={`font-bold uppercase tracking-wide text-sm transition-colors ${scrolled ? 'text-cft-ink hover:text-cft-primary' : 'text-white/90 hover:text-white drop-shadow-sm'}`}
+                  >
+                    {id}
+                  </button>
+                )
               ))}
               <button
                 onClick={() => scrollTo('contact')}
@@ -219,9 +229,15 @@
           {menuOpen && (
             <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 absolute w-full shadow-xl top-full">
               {links.map(id => (
-                <button key={id} onClick={() => scrollTo(id)} className="block w-full text-left py-3 font-medium capitalize text-cft-ink">
-                  {id}
-                </button>
+                id === 'our story' ? (
+                  <a key={id} href="our-story.html" className="block w-full text-left py-3 font-medium capitalize text-cft-ink">
+                    {id}
+                  </a>
+                ) : (
+                  <button key={id} onClick={() => scrollTo(id)} className="block w-full text-left py-3 font-medium capitalize text-cft-ink">
+                    {id}
+                  </button>
+                )
               ))}
               <button onClick={() => scrollTo('contact')} className="block w-full text-left py-3 font-bold text-cft-primary">
                 Contact Us
@@ -245,23 +261,18 @@
 
         <div className="relative z-10 container mx-auto px-6">
           <FadeInSection className="max-w-4xl">
-            <h1 className="hero-title text-white mb-10">
-              Circular Economy Concrete – <br />40% Less CO₂, Today
+            <h1 className="hero-title text-white mb-10" style={{ fontSize: '2.8rem' }}>
+              Concrete hasn't changed in a century.<br />We just did.
             </h1>
 
-            <p className="text-lg text-white/95 mb-8 leading-relaxed max-w-2xl font-medium drop-shadow-md">
-              Over the past 10 years, we have led, advised, and helped hundreds of companies to develop and grow their business and succeed in the global market and at the same time become more sustainable. It is our passion to help companies grow and succeed sustainably.
-            </p>
-            <p className="text-lg text-white/95 mb-8 leading-relaxed max-w-2xl font-medium drop-shadow-md">
-              We have recognised that despite efforts in the construction industry, focus on more sustainable concrete has been to reduce one of more raw materials, whereas we want to focus on circular economy and its tremendous potential in reducing CO₂ and improving profitability.
-            </p>
-            <p className="text-lg text-white/95 mb-12 leading-relaxed max-w-2xl font-medium drop-shadow-md">
-              Working together with inventors, university research and construction professionals we have developed a methodology, mixing and process to better utilise demolished concrete and produce stronger concrete, with less cement, less costs and significantly reduced carbon footprint.
-            </p>
-
-            <blockquote className="border-l-4 border-cft-primary pl-6 italic text-white/90 mb-14 text-lg">
-              — Jukka Mäkelä and Jarkko Hämäläinen, founders of Carbon Free Technologies
+            <blockquote className="text-xl md:text-2xl text-white/95 mb-10 leading-relaxed max-w-2xl font-medium drop-shadow-md italic">
+              "Demolished concrete isn't waste – it's our most abundant raw material."
             </blockquote>
+
+            <a href="our-story.html" className="inline-flex items-center text-cft-primary hover:text-white transition-colors mb-14 font-medium group">
+              Read our story
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
 
             <button onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
               className="px-10 py-5 bg-cft-primary text-white rounded text-xl font-bold hover:bg-cft-dark transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
@@ -274,11 +285,11 @@
 
     const Stats = () => {
       const stats = [
-        { val: '10', label: 'years of R&D' },
-        { val: '200', label: 'years of combined sustainability leadership' },
-        { val: '30 %', label: 'of all waste – to be abolished' },
+        { val: '>10', label: 'years of R&D' },
+        { val: '>200', label: 'years of combined sustainability leadership' },
+        { val: '100%', label: 'recycled aggregate' },
         { val: '40%', label: 'reduction of CO₂' },
-        { val: '10', label: 'stronger concrete' },
+        { val: '10%', label: 'stronger concrete' },
         { val: '50-80%', label: 'lower aggregate related costs' }
       ];
 
@@ -295,8 +306,8 @@
                   </div>
                 ))}
               </div>
-              <p className="text-center text-cft-muted mt-12 max-w-2xl mx-auto text-lg">
-                CFT is intriducing a wew way to thinking concrete production – providing holistic sustainable solutions based on circular economy methodologies and value chain management.
+              <p className="text-center text-cft-ink mt-12 max-w-3xl mx-auto text-xl font-medium leading-relaxed">
+                CFT is introducing a <strong className="text-cft-primary">new way of thinking</strong> concrete production – providing <strong className="text-cft-primary">holistic sustainable solutions</strong> based on circular economy methodologies and value chain management.
               </p>
             </FadeInSection>
           </div>
@@ -345,40 +356,10 @@
               </FadeInSection>
             </div>
 
-            {/* Core Expertise */}
-            <FadeInSection className="mt-20">
-              <h3 className="text-2xl text-cft-primary mb-6 font-bold">Core Expertise</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                {expertise.map((e, i) => (
-                  <div key={i} className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center h-full hover:shadow-md transition-shadow group">
-                    <div className="w-12 h-12 rounded-full bg-cft-primary/10 flex items-center justify-center mb-4 group-hover:bg-cft-primary/20 transition-colors">
-                      <svg className="w-6 h-6 text-cft-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                    </div>
-                    <span className="font-bold text-cft-ink text-sm leading-tight">{e}</span>
-                  </div>
-                ))}
-              </div>
-            </FadeInSection>
 
-            {/* Key Points */}
-            <FadeInSection className="mt-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                {[
-                  { title: 'Innovations', desc: 'More than 10 years of R&D' },
-                  { title: 'Solution', desc: 'Replace aggregates with RCA combined with application-based additives and controlled value chain' },
-                  { title: 'Impact', desc: 'Substantial reduction of waste, CO2 and materially stronger concrete – significantly cheaper' },
-                  { title: 'Global', desc: 'Fully modular and scalable with planned projects and pilots in several countries globally' },
-                  { title: 'Practical', desc: 'Compatible with existing equipment – no new capex required' },
-                ].map((p, i) => (
-                  <div key={i} className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                    <h4 className="text-cft-primary font-bold mb-2">{p.title}</h4>
-                    <p className="text-cft-muted text-sm">{p.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </FadeInSection>
+
+
+
           </div>
         </section>
       );
@@ -462,48 +443,38 @@
           <img src="./images/aerial_nature_path.png" className="w-full h-full object-cover opacity-10" alt="" />
         </div>
         <div className="container mx-auto px-6 relative z-10">
-          <FadeInSection className="text-center mb-20">
-            <h2 className="text-4xl text-cft-ink mb-6">Solution & Process</h2>
-            <p className="max-w-3xl mx-auto text-cft-muted text-lg mb-8">
-              Customer need drives generation of RCA (size and type of crushed concrete, type of additives, mixing plans, etc.). On-boarding requirements and specifications from customers relating to the end-user applications are used to optimise the generation of RCA from CDW to replace aggregates when producing new concrete.
-            </p>
-            <p className="max-w-3xl mx-auto text-cft-muted text-lg">
-              AI driven digital platform helps to manage the entire RCA value chain for access, costs and quality control.
+          {/* Section Label */}
+          <FadeInSection className="text-center mb-16">
+            <span className="text-sm uppercase tracking-widest text-cft-muted font-medium">
+              Solution
+            </span>
+            <h2 className="text-4xl text-cft-ink mt-3 mb-4">One Platform. Full Control.</h2>
+            <p className="max-w-2xl mx-auto text-cft-muted text-lg">
+              Our AI platform manages the entire value chain – from demolition site to new concrete.<br />
+              You define the need, we optimize the mix.
             </p>
           </FadeInSection>
 
+
+
+          {/* Detailed Process: 5 icon-based steps */}
           <FadeInSection>
-            <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-4 mb-20">
+            <h3 className="text-2xl font-bold text-cft-ink text-center mb-10">How It Works</h3>
+            <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-6 mb-20">
               {[
-                { n: '1', t: 'Imaging and Certify', d: 'Data gathering' },
-                { n: '2', t: 'Classify and Process', d: 'AI Driven' },
-                { n: '3', t: 'Crushing & Sieving', d: 'equipment today' },
-                { n: '4', t: 'Mixing & Additives', d: 'global access' },
-                { n: '5', t: 'RCA Concrete', d: 'application-based mix & methodology' },
+                { icon: '🔍', t: 'Validation', d: 'Verify source material' },
+                { icon: '🏗️', t: 'Demolition', d: 'Source material processing' },
+                { icon: '♻️', t: 'Treatment', d: 'Prepare aggregates' },
+                { icon: '🧪', t: 'Mixing', d: 'Optimize concrete recipe' },
+                { icon: '✅', t: 'Certified Concrete', d: 'Ready to build' },
               ].map((s, i) => (
-                <div key={i} className="text-center p-4">
-                  <div className="w-16 h-16 mx-auto bg-cft-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4 shadow-lg">{s.n}</div>
-                  <div className="font-bold text-cft-ink">{s.t}</div>
-                  <div className="text-sm text-cft-muted">{s.d}</div>
+                <div key={i} className="text-center p-4 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="text-4xl mb-3">{s.icon}</div>
+                  <div className="font-bold text-cft-ink text-sm mb-1">{s.t}</div>
+                  <div className="text-xs text-cft-muted">{s.d}</div>
                 </div>
               ))}
             </div>
-
-            {/* Input/Output */}
-            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-20">
-              <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm text-center">
-                <div className="text-xs font-bold text-cft-muted uppercase mb-2">Input</div>
-                <div className="font-bold text-cft-ink text-lg">Project owners and contractors</div>
-                <div className="text-cft-muted text-sm">On-boarding Applications & specifications</div>
-              </div>
-              <div className="p-6 bg-white rounded-2xl border-2 border-cft-primary shadow-sm text-center">
-                <div className="text-xs font-bold text-cft-primary uppercase mb-2">Output</div>
-                <div className="font-bold text-cft-ink text-lg">RCA Concrete</div>
-                <div className="text-cft-muted text-sm">application-based mix & methodology</div>
-              </div>
-            </div>
-
-
           </FadeInSection>
 
           {/* Real-Life Impact Section */}
@@ -623,9 +594,9 @@
         <Navbar />
         <Hero />
         <Stats />
+        <Solution />
         <About />
         <Market />
-        <Solution />
         <Team />
         <Footer />
       </div>
