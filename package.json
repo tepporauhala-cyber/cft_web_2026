@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "build": "rm -rf public && mkdir -p public && cp *.html public/ && cp -r images public/images && cp *.png public/ 2>/dev/null || true",
-    "start": "npx serve public"
+    "start": "npx serve public",
+    "deploy": "npx wrangler deploy --assets=./public"
   },
   "devDependencies": {
     "serve": "^14.2.4"
