@@ -1,0 +1,23 @@
+node_modules/
+public/
+.wrangler/
+.claude/
+
+# Temp files
+temp_pptx_extract/
+*.txt
+
+# Large binaries
+*.pptx
+*.zip
+*.png
+!images/*.png
+
+# Config files (not needed for Pages)
+vercel.json
+wrangler.toml
+wrangler.jsonc
+
+# OS files
+.DS_Store
+Thumbs.db
